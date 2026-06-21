@@ -1,0 +1,86 @@
+//app.js
+
+import {useState} from 'react';
+import products from './product';
+import './App.css';
+import ProductCart from "./ProductCart";
+
+function App(){
+
+  const [cart,setCart] = useState([]);
+
+  const addToCart = (product) =>{
+    setCart([...cart, product]);
+    alert(`${product.name} добавлен в корзину`);
+  };
+
+  const removeFromCart = (productId)=> {
+    const newCart = cart.filter(item => item.id !== productId);
+    setCart(newCart);
+  }
+
+  return(
+      <div>
+        <h1>Магазин электроники</h1>
+      
+        <div className='products-grid'>
+          {products.map(product => (
+            <ProductCart 
+              key= {product.id} 
+              name={product.name} 
+              price={product.price} 
+              onAdd={() => addToCart(product)}
+            />
+          ))}
+        </div>
+        <div className='cart-section'>
+          <h2>корзина({cart.length})</h2>
+          {cart.length === 0 ? (
+            <p>корзина пуста</p>
+          ) : (
+            <>
+              {cart.map(item=>(
+                <div key= {item.id} className='cart-item'>
+                  <span>{item.name} - {item.price}</span>
+                  <button onClick={() => removeFromCart(item.id)}>удалить</button>
+                </div>
+              ))}
+              
+              <div className='total-price'>итог: {cart.reduce((sum, item) => sum + item.price, 0)}</div>
+            </>
+          )}
+        </div>
+
+      </div>
+  );
+}
+
+export default App;
+
+//product.js
+const products = [
+    { id: 1, name: 'ноутбук honor magicbook, price: 50000' },
+    { id: 2, name: 'ноутбук honor magicbook, price: 50000' },
+    { id: 3, name: 'ноутбук honor magicbook, price: 50000' },
+    { id: 4, name: 'ноутбук honor magicbook, price: 50000' },
+    { id: 5, name: 'ноутбук honor magicbook, price: 50000' },
+    { id: 6, name: 'ноутбук honor magicbook, price: 50000' },
+    { id: 7, name: 'ноутбук honor magicbook, price: 50000' },
+    { id: 8, name: 'ноутбук honor magicbook, price: 50000' },
+    { id: 9, name: 'ноутбук honor magicbook, price: 50000' },
+];
+
+export default products
+
+//ProductCart.js
+function ProductCart(props){
+    return(
+        <div style={{border: '1px solid #ccc', padding: '16px', margin: '8px'}}>
+<h3>{props.name}</h3>
+<p>Цена: {props.price} рублей</p>
+<button onClick={props.onAdd}>В корзину</button>
+        </div>
+    );
+}
+
+export default ProductCart
